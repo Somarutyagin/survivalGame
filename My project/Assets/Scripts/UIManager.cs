@@ -22,12 +22,12 @@ public class UIManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKey(KeyCode.Escape) && GlobalVaribles.gameStatus == true)
+        if (Input.GetKeyUp(KeyCode.Escape) && GlobalVaribles.gameStatus == true)
         {
             PauseDisplay.SetActive(true);
             GlobalVaribles.gameStatus = false;
         }
-        else if (Input.GetKey(KeyCode.Escape) && GlobalVaribles.gameStatus == false && PauseDisplay.activeSelf)
+        else if (Input.GetKeyUp(KeyCode.Escape) && GlobalVaribles.gameStatus == false && PauseDisplay.activeSelf)
         {
             OnContinueButtonPressed();
         }

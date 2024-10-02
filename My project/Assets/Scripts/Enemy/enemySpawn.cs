@@ -5,8 +5,10 @@ using UnityEngine;
 public class enemySpawn : MonoBehaviour
 {
     [SerializeField] private GameObject enemy;
+    [SerializeField] private GameObject enemyPool;
     [HideInInspector] public bool isActiveSpawnEnemy = false;
 
+    private float enemyMaxCount = 100;
     private float enemySpawndelay = 1f;
     private const float border = 99.0f;
 
@@ -29,8 +31,12 @@ public class enemySpawn : MonoBehaviour
         {
             yield return new WaitForSeconds(enemySpawndelay);
 
-            Vector2 spawnPos = new Vector2 (Random.Range(-border, border + 1), Random.Range(-border, border + 1));
-            Instantiate(enemy, spawnPos, Quaternion.identity);
+            //ограничение в спавне для избежания потенциальных проблем с производительностью
+            if (enemyPool.transform.childCount < enemyMaxCount)
+            {
+                Vector2 spawnPos = new Vector2(Random.Range(-border, border + 1), Random.Range(-border, border + 1));
+                Instantiate(enemy, spawnPos, Quaternion.identity, enemyPool.transform);
+            }
 
             if (isActiveSpawnEnemy == false)
             {

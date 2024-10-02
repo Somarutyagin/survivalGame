@@ -8,6 +8,8 @@ public class PlayerMover : MonoBehaviour
     private Camera camera_;
     private Vector3 cameraPosStart;
 
+    private float speed = 4f;
+
     private void Start()
     {
         camera_ = Camera.main;
@@ -18,21 +20,21 @@ public class PlayerMover : MonoBehaviour
     {
         if (GlobalVaribles.gameStatus == true)
         {
-            if (Input.GetKey(KeyCode.UpArrow))
+            if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W))
             {
-                transform.Translate(0, 0.1f, 0);
+                transform.Translate(0, speed * Time.deltaTime, 0);
             }
-            if (Input.GetKey(KeyCode.DownArrow))
+            if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
             {
-                transform.Translate(0, -0.1f, 0);
+                transform.Translate(0, -1 * speed * Time.deltaTime, 0);
             }
-            if (Input.GetKey(KeyCode.LeftArrow))
+            if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
             {
-                transform.Translate(-0.1f, 0, 0);
+                transform.Translate(-1 * speed * Time.deltaTime, 0, 0);
             }
-            if (Input.GetKey(KeyCode.RightArrow))
+            if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
             {
-                transform.Translate(0.1f, 0, 0);
+                transform.Translate(speed * Time.deltaTime, 0, 0);
             }
         }
 

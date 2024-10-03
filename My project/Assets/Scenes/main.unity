@@ -1158,6 +1158,7 @@ GameObject:
   - component: {fileID: 549795746}
   - component: {fileID: 549795745}
   - component: {fileID: 549795747}
+  - component: {fileID: 549795748}
   m_Layer: 0
   m_Name: spawnManager
   m_TagString: Untagged
@@ -1207,6 +1208,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdb00d8299cf8894480cf1019b538d92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &549795748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 549795744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49591ab2c22584d06a0fc6b70c728275, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  drop: {fileID: 1051513611036779586, guid: ffe951974f1cf4b1a9b39684df2dad05, type: 3}
+  dropPool: {fileID: 1202696307}
+  isActiveSpawnDrop: 0
 --- !u!1 &604931457
 GameObject:
   m_ObjectHideFlags: 0
@@ -1890,6 +1906,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 2
   m_VerticalFit: 2
+--- !u!1 &1202696307
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1202696308}
+  m_Layer: 0
+  m_Name: dropPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1202696308
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1202696307}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1211935930
 GameObject:
   m_ObjectHideFlags: 0
@@ -2166,7 +2213,7 @@ Transform:
   m_Children:
   - {fileID: 220724529}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1296389534
 MonoBehaviour:
@@ -2239,7 +2286,7 @@ Transform:
   - {fileID: 970056715}
   - {fileID: 1247773938}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1791269625
 GameObject:

@@ -5,11 +5,13 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     private enemySpawn enemySpawn_;
+    private dropSpawn dropSpawn_;
 
     private void Awake()
     {
         GlobalVaribles.Init();
         enemySpawn_ = gameObject.GetComponent<enemySpawn>();
+        dropSpawn_ = gameObject.GetComponent<dropSpawn>();
     }
     private void Update()
     {
@@ -17,19 +19,22 @@ public class GameManager : MonoBehaviour
         {
             Time.timeScale = 1f;
 
-            //старт спавнеров
-            if (enemySpawn_.isActiveSpawnEnemy == false)
+            //пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+            if (enemySpawn_.isActiveSpawnEnemy == false && dropSpawn_.isActiveSpawnDrop == false)
             {
                 StartCoroutine(enemySpawn_.spawnEnemy());
+                StartCoroutine(dropSpawn_.spawnDrop());
             }
         }
         else
         {
             Time.timeScale = 0f;
 
-            //остановка спавнеров
+            //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             enemySpawn_.isActiveSpawnEnemy = false;
             enemySpawn_.StopAllCoroutines();
+            dropSpawn_.isActiveSpawnDrop = false;
+            dropSpawn_.StopAllCoroutines();
         }
     }
 }

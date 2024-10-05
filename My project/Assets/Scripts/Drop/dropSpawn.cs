@@ -15,10 +15,6 @@ public class dropSpawn : MonoBehaviour
 
     void Start()
     {
-        
-    }
-    void Update()
-    {
         player = GameObject.Find("Player").transform;
     }
 
@@ -33,6 +29,18 @@ public class dropSpawn : MonoBehaviour
             if (dropPool.transform.childCount < dropMaxCount)
             {
                 Vector2 spawnPos = new Vector2(Random.Range(player.position.x-30, player.position.x+30), Random.Range(player.position.y-30, player.position.y+30));
+
+                //защита от спавна дропа вне границы карты
+                if (spawnPos.x > GlobalVaribles.border)
+                    spawnPos = new Vector2(GlobalVaribles.border, spawnPos.y);
+                else if (spawnPos.x < -1 * GlobalVaribles.border)
+                    spawnPos = new Vector2(-1 * GlobalVaribles.border, spawnPos.y);
+
+                if (spawnPos.y > GlobalVaribles.border)
+                    spawnPos = new Vector2(spawnPos.x, GlobalVaribles.border);
+                else if (spawnPos.y < -1 * GlobalVaribles.border)
+                    spawnPos = new Vector2(spawnPos.x, GlobalVaribles.border);
+
                 Instantiate(drop, spawnPos, Quaternion.identity, dropPool.transform);
             }
 

@@ -1,18 +1,15 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class dropAI : MonoBehaviour
 {
-    
     void Start()
     {
-        
+        StartCoroutine(destroy());
     }
-
-    void Update()
+    private IEnumerator destroy()
     {
-        
+        yield return new WaitForSeconds(10f);
+        Destroy(gameObject);
     }
 }

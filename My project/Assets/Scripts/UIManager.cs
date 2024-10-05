@@ -9,15 +9,28 @@ public class UIManager : MonoBehaviour
     [SerializeField] private List<GameObject> UIListGame = new List<GameObject>();
 
     [SerializeField] private GameObject PauseDisplay;
+    [SerializeField] private Text scoreTxt;
+    [SerializeField] private Text recordTxt;
 
     private void Start()
     {
+        GlobalVaribles.gameStatus = false;
         MenuConfigurator();
     }
 
     private void MenuConfigurator()
     {
-        OnExitButtonPressed();
+        for (int i = 0; i < UIListMenu.Count; i++)
+        {
+            UIListMenu[i].SetActive(true);
+        }
+        for (int i = 0; i < UIListGame.Count; i++)
+        {
+            UIListGame[i].SetActive(false);
+        }
+
+        PauseDisplay.SetActive(false);
+        recordTxt.text = GlobalVaribles.record.ToString();
     }
 
     private void Update()
@@ -30,6 +43,11 @@ public class UIManager : MonoBehaviour
         else if (Input.GetKeyUp(KeyCode.Escape) && GlobalVaribles.gameStatus == false && PauseDisplay.activeSelf)
         {
             OnContinueButtonPressed();
+        }
+
+        if (GlobalVaribles.gameStatus == true)
+        {
+            scoreTxt.text = GlobalVaribles.score.ToString();
         }
     }
 
@@ -47,16 +65,10 @@ public class UIManager : MonoBehaviour
     }
     public void OnExitButtonPressed()
     {
-        for (int i = 0; i < UIListMenu.Count; i++)
-        {
-            UIListMenu[i].SetActive(true);
-        }
-        for (int i = 0; i < UIListGame.Count; i++)
-        {
-            UIListGame[i].SetActive(false);
-        }
-        PauseDisplay.SetActive(false);
         GlobalVaribles.gameStatus = false;
+        GameManager.Instance.ResetGame();
+
+        MenuConfigurator();
     }
     public void OnContinueButtonPressed()
     {

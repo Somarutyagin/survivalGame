@@ -5,12 +5,12 @@ using UnityEngine;
 
 public class PlayerMover : MonoBehaviour
 {
+    private playerConfig config;
     private Transform weapon;
     private Camera camera_;
     private Vector3 cameraPosStart;
     private Vector2 playerPos;
 
-    private float speed = 4f;
     private float rotationSpeed = 1f;
 
     private void Start()
@@ -18,6 +18,7 @@ public class PlayerMover : MonoBehaviour
         camera_ = Camera.main;
         camera_.transform.position = cameraPosStart;
         weapon = transform.GetChild(1);
+        config = gameObject.GetComponent<playerConfig>();
     }
 
     private void Update()
@@ -32,19 +33,19 @@ public class PlayerMover : MonoBehaviour
 
                 if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W))
                 {
-                    transform.Translate(0, speed * Time.deltaTime, 0);
+                    transform.Translate(0, config.speed * Time.deltaTime, 0);
                 }
                 if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
                 {
-                    transform.Translate(0, -1 * speed * Time.deltaTime, 0);
+                    transform.Translate(0, -1 * config.speed * Time.deltaTime, 0);
                 }
                 if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
                 {
-                    transform.Translate(-1 * speed * Time.deltaTime, 0, 0);
+                    transform.Translate(-1 * config.speed * Time.deltaTime, 0, 0);
                 }
                 if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
                 {
-                    transform.Translate(speed * Time.deltaTime, 0, 0);
+                    transform.Translate(config.speed * Time.deltaTime, 0, 0);
                 }
             }
             else

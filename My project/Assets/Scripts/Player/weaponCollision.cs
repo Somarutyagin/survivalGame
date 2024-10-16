@@ -4,9 +4,25 @@ using UnityEngine;
 
 public class weaponCollision : MonoBehaviour
 {
-    private void OnTriggerEnter2D(Collider2D collision)
+    //private bool isDamageCooldown = false;
+    private playerConfig config;
+
+    private void Awake()
     {
-        if (collision.tag == "Enemy")
+        config = transform.parent.parent.GetComponent<playerConfig>();
+    }
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == "Enemy")
+        {
+            DealDamage(other);
+        }
+    }
+    private void DealDamage(Collider2D collision)
+    {
+        collision.GetComponent<enemyConfig>().hp -= config.damage;
+
+        if (collision.GetComponent<enemyConfig>().hp <= 0)
         {
             Destroy(collision.gameObject);
             GlobalVaribles.score++;

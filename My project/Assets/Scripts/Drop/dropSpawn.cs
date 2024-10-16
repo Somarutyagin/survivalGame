@@ -11,7 +11,7 @@ public class dropSpawn : MonoBehaviour
     private Transform player;
     private float dropMaxCount = 20;
     private float dropSpawndelay = 10;
-    private const float border = 99.0f;
+
 
     void Start()
     {

@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     private enemySpawn enemySpawn_;
     private dropSpawn dropSpawn_;
     private UIManager UIManager_;
+    private playerConfig playerConfig_;
     private Transform enemyPool, dropPool, player;
 
     private void Awake()
@@ -43,6 +44,7 @@ public class GameManager : MonoBehaviour
         enemyPool = GameObject.Find("enemyPool").transform;
         dropPool = GameObject.Find("dropPool").transform;
         player = GameObject.Find("Player").transform;
+        playerConfig_ = player.GetComponent<playerConfig>();
     }
     private void Update()
     {
@@ -88,6 +90,7 @@ public class GameManager : MonoBehaviour
         }
 
         player.position = new Vector3(0, 0, 0);
+        playerConfig_.Reset();
     }
 }
 

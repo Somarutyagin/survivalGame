@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+public enum gameStatus
+{
+    play,
+    pause
+}
+
 public class GameManager : MonoBehaviour
 {
     private static GameManager _instance;
@@ -17,11 +23,13 @@ public class GameManager : MonoBehaviour
             return _instance;
         }
     }
-    private enemySpawn enemySpawn_;
-    private dropSpawn dropSpawn_;
+    private spawnManager spawnManager_;
     private UIManager UIManager_;
     private playerConfig playerConfig_;
     private Transform enemyPool, dropPool, player;
+
+    public float border;
+    public gameStatus activeGameStatus;
 
     private void Awake()
     {
@@ -34,10 +42,8 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        GlobalVaribles.Init();
         GameObject SpawnControllerObj = GameObject.Find("spawnController");
-        enemySpawn_ = SpawnControllerObj.GetComponent<enemySpawn>();
-        dropSpawn_ = SpawnControllerObj.GetComponent<dropSpawn>();
+        spawnManager_ = SpawnControllerObj.GetComponent<spawnManager>();
         GameObject UImanagerObj = GameObject.Find("UIController");
         UIManager_ = UImanagerObj.GetComponent<UIManager>();
 
@@ -45,29 +51,27 @@ public class GameManager : MonoBehaviour
         dropPool = GameObject.Find("dropPool").transform;
         player = GameObject.Find("Player").transform;
         playerConfig_ = player.GetComponent<playerConfig>();
+
+        GameObject map = GameObject.Find("Map");
+        border = map.transform.GetChild(0).position.x - 1;
     }
     private void Update()
     {
-        if (GlobalVaribles.gameStatus == true)
+        if (Instance.activeGameStatus == gameStatus.play)
         {
             Time.timeScale = 1f;
 
-            //����� ���������
-            if (enemySpawn_.isActiveSpawnEnemy == false && dropSpawn_.isActiveSpawnDrop == false)
+            if (spawnManager_.isActiveSpawn == false)
             {
-                StartCoroutine(enemySpawn_.spawnEnemy());
-                StartCoroutine(dropSpawn_.spawnDrop());
+                spawnManager_.startSpawn();
             }
         }
         else
         {
             Time.timeScale = 0f;
 
-            //��������� ���������
-            enemySpawn_.isActiveSpawnEnemy = false;
-            enemySpawn_.StopAllCoroutines();
-            dropSpawn_.isActiveSpawnDrop = false;
-            dropSpawn_.StopAllCoroutines();
+            spawnManager_.isActiveSpawn = false;
+            spawnManager_.StopAllCoroutines();
         }
     }
 
@@ -78,7 +82,7 @@ public class GameManager : MonoBehaviour
     }
     public void ResetGame()
     {
-        GlobalVaribles.score = 0;
+        UIManager_.score = 0;
 
         for (int i = 0; i < enemyPool.childCount; i++)
         {

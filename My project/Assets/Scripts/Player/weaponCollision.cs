@@ -6,6 +6,7 @@ public class weaponCollision : MonoBehaviour
 {
     //private bool isDamageCooldown = false;
     private playerConfig config;
+    [SerializeField] private UIManager manager;
 
     private void Awake()
     {
@@ -25,7 +26,7 @@ public class weaponCollision : MonoBehaviour
         if (collision.GetComponent<enemyConfig>().hp <= 0)
         {
             Destroy(collision.gameObject);
-            GlobalVaribles.score++;
+            manager.score++;
         }
     }
 }

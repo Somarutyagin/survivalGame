@@ -45,8 +45,10 @@ public class PlayerCollision : MonoBehaviour
 
         for (int i = 0; i < 50; i++)
         {
+            Vector3 distance = transform.position - enemyPos;
+
             yield return new WaitForSeconds(time / iterations);
-            transform.position = transform.position + new Vector3((transform.position - enemyPos).x / iterations * pushPower, (transform.position - enemyPos).y / iterations * pushPower, 0);
+            transform.position = transform.position + new Vector3(distance.x / iterations * pushPower, distance.y / iterations * pushPower, 0);
         }
     }
 }

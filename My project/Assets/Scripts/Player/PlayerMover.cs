@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerMover : MonoBehaviour
@@ -23,11 +24,11 @@ public class PlayerMover : MonoBehaviour
 
     private void Update()
     {
-        if (GlobalVaribles.gameStatus == true)
+        if (GameManager.Instance.activeGameStatus == gameStatus.play)
         {
             //проверка на выход из границ арены
             //движение игрока
-            if (transform.position.x < GlobalVaribles.border && transform.position.x > -1 * GlobalVaribles.border && transform.position.y < GlobalVaribles.border && transform.position.y > -1 * GlobalVaribles.border)
+            if (transform.position.x < GameManager.Instance.border && transform.position.x > -1 * GameManager.Instance.border && transform.position.y < GameManager.Instance.border && transform.position.y > -1 * GameManager.Instance.border)
             {
                 playerPos = transform.position;
 

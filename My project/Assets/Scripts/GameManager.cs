@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
     private spawnManager spawnManager_;
     private UIManager UIManager_;
     private playerConfig playerConfig_;
+    private PlayerCollision PlayerCollision_;
     private Transform enemyPool, dropPool, player;
 
     public float border;
@@ -51,6 +52,7 @@ public class GameManager : MonoBehaviour
         dropPool = GameObject.Find("dropPool").transform;
         player = GameObject.Find("Player").transform;
         playerConfig_ = player.GetComponent<playerConfig>();
+        PlayerCollision_ = player.GetComponent<PlayerCollision>();
 
         GameObject map = GameObject.Find("Map");
         border = map.transform.GetChild(0).position.x - 1;
@@ -94,6 +96,7 @@ public class GameManager : MonoBehaviour
         }
 
         player.position = new Vector3(0, 0, 0);
+        PlayerCollision_.resetEffects();
         playerConfig_.Reset();
     }
 }

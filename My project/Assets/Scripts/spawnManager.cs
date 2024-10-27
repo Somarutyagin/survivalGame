@@ -36,7 +36,7 @@ public class spawnManager : MonoBehaviour
         {
             yield return new WaitForSeconds(enemySpawndelay);
 
-            //ограничение в спавне для избежания потенциальных проблем с производительностью
+            //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             if (enemyPool.transform.childCount < enemyMaxCount)
             {
                 Vector2 spawnPos = new Vector2(Random.Range(-1 * GameManager.Instance.border, GameManager.Instance.border + 1), Random.Range(-1 * GameManager.Instance.border, GameManager.Instance.border + 1));
@@ -45,7 +45,7 @@ public class spawnManager : MonoBehaviour
 
             if (isActiveSpawn == false)
             {
-                //выход из корутины
+                //пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                 yield break;
             }
         }
@@ -60,7 +60,7 @@ public class spawnManager : MonoBehaviour
             {
                 Vector2 spawnPos = new Vector2(Random.Range(player.position.x - 30, player.position.x + 30), Random.Range(player.position.y - 30, player.position.y + 30));
 
-                //защита от спавна дропа вне границы карты
+                //пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
                 if (spawnPos.x > GameManager.Instance.border)
                     spawnPos = new Vector2(GameManager.Instance.border, spawnPos.y);
                 else if (spawnPos.x < -1 * GameManager.Instance.border)

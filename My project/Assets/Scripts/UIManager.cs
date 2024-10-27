@@ -11,7 +11,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject PauseDisplay;
     [SerializeField] private Text scoreTxt;
     [SerializeField] private Text recordTxt;
-    //Score
+    /*Score
     private int _valueScore;
     public int score
     {
@@ -27,6 +27,7 @@ public class UIManager : MonoBehaviour
                 record = score;
         }
     }
+    
     //Record
     private const string keyRecord = "record";
     private int _valueRecord;
@@ -43,14 +44,16 @@ public class UIManager : MonoBehaviour
             _valueRecord = value;
         }
     }
+   
     private void Init()
     {
         _valueRecord = PlayerPrefs.GetInt(keyRecord);
     }
+    */
 
     private void Start()
     {
-        Init();
+        GameManager.Instance.Init();
         GameManager.Instance.activeGameStatus = gameStatus.pause;
         MenuConfigurator();
     }
@@ -67,7 +70,7 @@ public class UIManager : MonoBehaviour
         }
 
         PauseDisplay.SetActive(false);
-        recordTxt.text = record.ToString();
+        recordTxt.text = GameManager.Instance.record.ToString();
     }
 
     private void Update()
@@ -84,7 +87,7 @@ public class UIManager : MonoBehaviour
 
         if (GameManager.Instance.activeGameStatus == gameStatus.play)
         {
-            scoreTxt.text = score.ToString();
+            scoreTxt.text = GameManager.Instance.score.ToString();
         }
     }
 

@@ -101,7 +101,7 @@ public class PlayerCollision : MonoBehaviour
 
     private IEnumerator damageTakePush(Collider2D collision)
     {
-        //отталкивание при уроне
+        //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
         Vector3 enemyPos = collision.transform.position;
 
         int iterations = 100;

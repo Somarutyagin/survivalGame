@@ -26,14 +26,14 @@ public class weaponCollision : MonoBehaviour
         if (collision.GetComponent<enemyConfig>().hp <= 0)
         {
             Destroy(collision.gameObject);
-            manager.score++;
+            GameManager.Instance.score++;
         }
 
         StartCoroutine(damageDealPush(collision));
     }
     private IEnumerator damageDealPush(Collider2D collision)
     {
-        //отталкивание при уроне
+        //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
         Vector3 weaponPos = collision.transform.position;
 
         int iterations = 100;

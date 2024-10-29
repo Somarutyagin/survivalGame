@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+public enum gameStatus
+{
+    play,
+    pause
+}
+
 public class GameManager : MonoBehaviour
 {
     private static GameManager _instance;
@@ -17,11 +23,48 @@ public class GameManager : MonoBehaviour
             return _instance;
         }
     }
-    private enemySpawn enemySpawn_;
-    private dropSpawn dropSpawn_;
+    private spawnManager spawnManager_;
     private UIManager UIManager_;
     private playerConfig playerConfig_;
+    private PlayerCollision PlayerCollision_;
     private Transform enemyPool, dropPool, player;
+
+    public float border;
+    public gameStatus activeGameStatus;
+    private int _valueScore;
+    public int score
+    {
+        get
+        {
+            Init();
+            return _valueScore;
+        }
+        set
+        {
+            _valueScore = value;
+            if (score > record)
+                record = score;
+        }
+    }
+    private string keyRecord = "record";
+    private int _valueRecord;
+    public int record
+    {
+        get
+        {
+            Init();
+            return _valueRecord;
+        }
+        set
+        {
+            PlayerPrefs.SetInt(keyRecord, value);
+            _valueRecord = value;
+        }
+    }
+    public void Init()
+    {
+        _valueRecord = PlayerPrefs.GetInt(keyRecord);
+    }
 
     private void Awake()
     {
@@ -34,10 +77,8 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        GlobalVaribles.Init();
         GameObject SpawnControllerObj = GameObject.Find("spawnController");
-        enemySpawn_ = SpawnControllerObj.GetComponent<enemySpawn>();
-        dropSpawn_ = SpawnControllerObj.GetComponent<dropSpawn>();
+        spawnManager_ = SpawnControllerObj.GetComponent<spawnManager>();
         GameObject UImanagerObj = GameObject.Find("UIController");
         UIManager_ = UImanagerObj.GetComponent<UIManager>();
 
@@ -45,29 +86,28 @@ public class GameManager : MonoBehaviour
         dropPool = GameObject.Find("dropPool").transform;
         player = GameObject.Find("Player").transform;
         playerConfig_ = player.GetComponent<playerConfig>();
+        PlayerCollision_ = player.GetComponent<PlayerCollision>();
+
+        GameObject map = GameObject.Find("Map");
+        border = map.transform.GetChild(0).position.x - 1;
     }
     private void Update()
     {
-        if (GlobalVaribles.gameStatus == true)
+        if (Instance.activeGameStatus == gameStatus.play)
         {
             Time.timeScale = 1f;
 
-            //����� ���������
-            if (enemySpawn_.isActiveSpawnEnemy == false && dropSpawn_.isActiveSpawnDrop == false)
+            if (spawnManager_.isActiveSpawn == false)
             {
-                StartCoroutine(enemySpawn_.spawnEnemy());
-                StartCoroutine(dropSpawn_.spawnDrop());
+                spawnManager_.startSpawn();
             }
         }
         else
         {
             Time.timeScale = 0f;
 
-            //��������� ���������
-            enemySpawn_.isActiveSpawnEnemy = false;
-            enemySpawn_.StopAllCoroutines();
-            dropSpawn_.isActiveSpawnDrop = false;
-            dropSpawn_.StopAllCoroutines();
+            spawnManager_.isActiveSpawn = false;
+            spawnManager_.StopAllCoroutines();
         }
     }
 
@@ -78,7 +118,7 @@ public class GameManager : MonoBehaviour
     }
     public void ResetGame()
     {
-        GlobalVaribles.score = 0;
+        score = 0;
 
         for (int i = 0; i < enemyPool.childCount; i++)
         {
@@ -90,6 +130,7 @@ public class GameManager : MonoBehaviour
         }
 
         player.position = new Vector3(0, 0, 0);
+        PlayerCollision_.resetEffects();
         playerConfig_.Reset();
     }
 }

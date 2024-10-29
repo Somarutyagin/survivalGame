@@ -19,12 +19,11 @@ public class enemyConfig : MonoBehaviour
     {
         damage = damageDefault;
         speed = speedDefault;
-        hp = hpDefault;
+        hp = hpDefault + GameManager.Instance.score; 
     }
     private void Update()
     {
-        if (hp > hpDefault)
-            hp = hpDefault;
+        
         hpTxt.text = hp.ToString();
 
         hpTxt.color = new Color(1 - (hp / hpDefault), hp / hpDefault, 0, 1);

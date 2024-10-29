@@ -11,10 +11,50 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject PauseDisplay;
     [SerializeField] private Text scoreTxt;
     [SerializeField] private Text recordTxt;
+    /*Score
+    private int _valueScore;
+    public int score
+    {
+        get
+        {
+            Init();
+            return _valueScore;
+        }
+        set
+        {
+            _valueScore = value;
+            if (score > record)
+                record = score;
+        }
+    }
+    
+    //Record
+    private const string keyRecord = "record";
+    private int _valueRecord;
+    public int record
+    {
+        get
+        {
+            Init();
+            return _valueRecord;
+        }
+        set
+        {
+            PlayerPrefs.SetInt(keyRecord, value);
+            _valueRecord = value;
+        }
+    }
+   
+    private void Init()
+    {
+        _valueRecord = PlayerPrefs.GetInt(keyRecord);
+    }
+    */
 
     private void Start()
     {
-        GlobalVaribles.gameStatus = false;
+        GameManager.Instance.Init();
+        GameManager.Instance.activeGameStatus = gameStatus.pause;
         MenuConfigurator();
     }
 
@@ -30,24 +70,24 @@ public class UIManager : MonoBehaviour
         }
 
         PauseDisplay.SetActive(false);
-        recordTxt.text = GlobalVaribles.record.ToString();
+        recordTxt.text = GameManager.Instance.record.ToString();
     }
 
     private void Update()
     {
-        if (Input.GetKeyUp(KeyCode.Escape) && GlobalVaribles.gameStatus == true)
+        if (Input.GetKeyUp(KeyCode.Escape) && GameManager.Instance.activeGameStatus == gameStatus.play)
         {
             PauseDisplay.SetActive(true);
-            GlobalVaribles.gameStatus = false;
+            GameManager.Instance.activeGameStatus = gameStatus.pause;
         }
-        else if (Input.GetKeyUp(KeyCode.Escape) && GlobalVaribles.gameStatus == false && PauseDisplay.activeSelf)
+        else if (Input.GetKeyUp(KeyCode.Escape) && GameManager.Instance.activeGameStatus == gameStatus.pause && PauseDisplay.activeSelf)
         {
             OnContinueButtonPressed();
         }
 
-        if (GlobalVaribles.gameStatus == true)
+        if (GameManager.Instance.activeGameStatus == gameStatus.play)
         {
-            scoreTxt.text = GlobalVaribles.score.ToString();
+            scoreTxt.text = GameManager.Instance.score.ToString();
         }
     }
 
@@ -61,11 +101,11 @@ public class UIManager : MonoBehaviour
         {
             UIListGame[i].SetActive(true);
         }
-        GlobalVaribles.gameStatus = true;
+        GameManager.Instance.activeGameStatus = gameStatus.play;
     }
     public void OnExitButtonPressed()
     {
-        GlobalVaribles.gameStatus = false;
+        GameManager.Instance.activeGameStatus = gameStatus.pause;
         GameManager.Instance.ResetGame();
 
         MenuConfigurator();
@@ -73,6 +113,6 @@ public class UIManager : MonoBehaviour
     public void OnContinueButtonPressed()
     {
         PauseDisplay.SetActive(false);
-        GlobalVaribles.gameStatus = true;
+        GameManager.Instance.activeGameStatus = gameStatus.play;
     }
 }

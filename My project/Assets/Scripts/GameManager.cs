@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
     private PlayerCollision PlayerCollision_;
     private Transform enemyPool, dropPool, player;
 
-    public float border;
+    [HideInInspector] public float border;
     public gameStatus activeGameStatus;
     private int _valueScore;
     public int score

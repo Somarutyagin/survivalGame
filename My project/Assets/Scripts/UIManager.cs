@@ -9,6 +9,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private List<GameObject> UIListGame = new List<GameObject>();
 
     [SerializeField] private GameObject PauseDisplay;
+    [SerializeField] private GameObject SettingsDisplay;
     [SerializeField] private Text scoreTxt;
     [SerializeField] private Text recordTxt;
     /*Score
@@ -70,6 +71,7 @@ public class UIManager : MonoBehaviour
         }
 
         PauseDisplay.SetActive(false);
+        SettingsDisplay.SetActive(false);
         recordTxt.text = GameManager.Instance.record.ToString();
     }
 
@@ -83,6 +85,13 @@ public class UIManager : MonoBehaviour
         else if (Input.GetKeyUp(KeyCode.Escape) && GameManager.Instance.activeGameStatus == gameStatus.pause && PauseDisplay.activeSelf)
         {
             OnContinueButtonPressed();
+        }
+        else if (Input.GetKeyUp(KeyCode.Escape) && GameManager.Instance.activeGameStatus == gameStatus.pause && !PauseDisplay.activeSelf)
+        {
+            if (!SettingsDisplay.activeSelf)
+                SettingsDisplay.SetActive(true);
+            else
+                SettingsDisplay.SetActive(false);
         }
 
         if (GameManager.Instance.activeGameStatus == gameStatus.play)

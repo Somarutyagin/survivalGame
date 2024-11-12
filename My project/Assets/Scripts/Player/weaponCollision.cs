@@ -23,12 +23,6 @@ public class weaponCollision : MonoBehaviour
     {
         collision.GetComponent<enemyConfig>().hp -= config.damage;
 
-        if (collision.GetComponent<enemyConfig>().hp <= 0)
-        {
-            Destroy(collision.gameObject);
-            GameManager.Instance.score++;
-        }
-
         StartCoroutine(damageDealPush(collision));
     }
     private IEnumerator damageDealPush(Collider2D collision)

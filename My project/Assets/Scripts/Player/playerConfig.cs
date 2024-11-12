@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+//using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,8 +22,9 @@ public class playerConfig : MonoBehaviour
     }
     private void Update()
     {
-        if (hp > hpDefault)
-            hp = hpDefault;
+        if (hp <= 0)
+            GameManager.Instance.Lose();
+
         hpTxt.text = hp.ToString();
 
         hpTxt.color = new Color(1 - (hp / hpDefault), hp / hpDefault, 0, 1);

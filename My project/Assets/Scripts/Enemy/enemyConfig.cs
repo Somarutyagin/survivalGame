@@ -23,9 +23,14 @@ public class enemyConfig : MonoBehaviour
     }
     private void Update()
     {
-        
         hpTxt.text = hp.ToString();
 
         hpTxt.color = new Color(1 - (hp / hpDefault), hp / hpDefault, 0, 1);
+
+        if (hp <= 0)
+        {
+            GameManager.Instance.score++;
+            Destroy(gameObject);
+        }
     }
 }

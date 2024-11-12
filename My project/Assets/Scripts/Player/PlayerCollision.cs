@@ -90,18 +90,12 @@ public class PlayerCollision : MonoBehaviour
             config.hp -= collision.GetComponent<enemyConfig>().damage;
             clip.SetTrigger("damage");
 
-            if (config.hp <= 0)
-            {
-                GameManager.Instance.Lose();
-            }
-
             StartCoroutine(damageTakePush(collision));
         }
     }
 
     private IEnumerator damageTakePush(Collider2D collision)
     {
-        //������������ ��� �����
         Vector3 enemyPos = collision.transform.position;
 
         int iterations = 100;

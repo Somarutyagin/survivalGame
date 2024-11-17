@@ -71,25 +71,26 @@ public class GameManager : MonoBehaviour
         if (_instance == null)
         {
             _instance = this;
-            DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
         }
         GameObject SpawnControllerObj = GameObject.Find("spawnController");
-        spawnManager_ = SpawnControllerObj.GetComponent<spawnManager>();
+        spawnManager_ = SpawnControllerObj?.GetComponent<spawnManager>();
         GameObject UImanagerObj = GameObject.Find("UIController");
-        UIManager_ = UImanagerObj.GetComponent<UIManager>();
+        UIManager_ = UImanagerObj?.GetComponent<UIManager>();
 
-        enemyPool = GameObject.Find("enemyPool").transform;
-        dropPool = GameObject.Find("dropPool").transform;
-        player = GameObject.Find("Player").transform;
-        playerConfig_ = player.GetComponent<playerConfig>();
-        PlayerCollision_ = player.GetComponent<PlayerCollision>();
+        enemyPool = GameObject.Find("enemyPool")?.transform;
+        dropPool = GameObject.Find("dropPool")?.transform;
+        player = GameObject.Find("Player")?.transform;
+        playerConfig_ = player?.GetComponent<playerConfig>();
+        PlayerCollision_ = player?.GetComponent<PlayerCollision>();
 
         GameObject map = GameObject.Find("Map");
-        border = map.transform.GetChild(0).position.x - 1;
+        if (map != null)
+            border = map.transform.GetChild(0).position.x - 1;
     }
     private void Update()
     {
@@ -97,41 +98,42 @@ public class GameManager : MonoBehaviour
         {
             Time.timeScale = 1f;
 
-            if (spawnManager_.isActiveSpawn == false)
+            if (spawnManager_?.isActiveSpawn == false)
             {
-                spawnManager_.startSpawn();
+                spawnManager_?.startSpawn();
             }
         }
         else
         {
             Time.timeScale = 0f;
-
-            spawnManager_.isActiveSpawn = false;
-            spawnManager_.StopAllCoroutines();
+            if (spawnManager_ != null)
+                spawnManager_.isActiveSpawn = false;
+            spawnManager_?.StopAllCoroutines();
         }
     }
 
     public void Lose()
     {
-        UIManager_.OnExitButtonPressed();
+        activeGameStatus = gameStatus.pause;
         ResetGame();
     }
     public void ResetGame()
     {
         score = 0;
 
-        for (int i = 0; i < enemyPool.childCount; i++)
+        for (int i = 0; i < enemyPool?.childCount; i++)
         {
-            Destroy(enemyPool.GetChild(i).gameObject);
+            Destroy(enemyPool?.GetChild(i).gameObject);
         }
-        for (int i = 0; i < dropPool.childCount; i++)
+        for (int i = 0; i < dropPool?.childCount; i++)
         {
-            Destroy(dropPool.GetChild(i).gameObject);
+            Destroy(dropPool?.GetChild(i).gameObject);
         }
 
-        player.position = new Vector3(0, 0, 0);
-        PlayerCollision_.resetEffects();
-        playerConfig_.Reset();
+        if (player != null)
+            player.position = new Vector3(0, 0, 0);
+        PlayerCollision_?.resetEffects();
+        playerConfig_?.Reset();
     }
 }
 

@@ -16,18 +16,29 @@ public class playerConfig : MonoBehaviour
     [HideInInspector] public float speed;
     [HideInInspector] public float hp;
 
+    [HideInInspector] public float maxHp;
+    [HideInInspector] public float hpScaler = 1f;
+
     private void Awake()
     {
         Reset();
     }
     private void Update()
     {
+        maxHp = hpScaler * hpDefault;
+
+        if (hp > maxHp)
+            hp = maxHp;
+
         if (hp <= 0)
             GameManager.Instance.Lose();
 
-        hpTxt.text = hp.ToString();
+        if (hpTxt != null)
+        {
+            hpTxt.text = hp.ToString();
 
-        hpTxt.color = new Color(1 - (hp / hpDefault), hp / hpDefault, 0, 1);
+            hpTxt.color = new Color(1 - (hp / hpDefault), hp / hpDefault, 0, 1);
+        }
     }
     public void Reset()
     {

@@ -10,11 +10,12 @@ public class enemyAI : MonoBehaviour
 
     void Start()
     {
-        player = GameObject.Find("Player").transform;
+        player = GameObject.Find("Player")?.transform;
     }
 
     void Update()
     {
-        transform.position = Vector3.MoveTowards(transform.position, player.position, speed * Time.deltaTime);
+        if (player != null)
+            transform.position = Vector3.MoveTowards(transform.position, player.position, speed * Time.deltaTime);
     }
 }

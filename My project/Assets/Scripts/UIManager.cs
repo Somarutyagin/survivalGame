@@ -114,8 +114,7 @@ public class UIManager : MonoBehaviour
     }
     public void OnExitButtonPressed()
     {
-        GameManager.Instance.activeGameStatus = gameStatus.pause;
-        GameManager.Instance.ResetGame();
+        GameManager.Instance.Lose();
 
         MenuConfigurator();
     }

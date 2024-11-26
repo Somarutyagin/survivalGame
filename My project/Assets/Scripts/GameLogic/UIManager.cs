@@ -12,46 +12,6 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject SettingsDisplay;
     [SerializeField] private Text scoreTxt;
     [SerializeField] private Text recordTxt;
-    /*Score
-    private int _valueScore;
-    public int score
-    {
-        get
-        {
-            Init();
-            return _valueScore;
-        }
-        set
-        {
-            _valueScore = value;
-            if (score > record)
-                record = score;
-        }
-    }
-    
-    //Record
-    private const string keyRecord = "record";
-    private int _valueRecord;
-    public int record
-    {
-        get
-        {
-            Init();
-            return _valueRecord;
-        }
-        set
-        {
-            PlayerPrefs.SetInt(keyRecord, value);
-            _valueRecord = value;
-        }
-    }
-   
-    private void Init()
-    {
-        _valueRecord = PlayerPrefs.GetInt(keyRecord);
-    }
-    */
-
     private void Start()
     {
         GameManager.Instance.Init();
@@ -59,7 +19,7 @@ public class UIManager : MonoBehaviour
         MenuConfigurator();
     }
 
-    private void MenuConfigurator()
+    public void MenuConfigurator()
     {
         for (int i = 0; i < UIListMenu.Count; i++)
         {

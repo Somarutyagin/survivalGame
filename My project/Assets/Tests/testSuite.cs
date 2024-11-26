@@ -37,7 +37,7 @@ public class TestSuite : MonoBehaviour
     [UnityTest]
     public IEnumerator SpawnEnemyAndAwardedPointsWhenDestroyingEnemies()
     {
-        //spawn
+        // spawn
         spawnController = new GameObject();
         spawnManager spawnManager_ = spawnController.AddComponent<spawnManager>();
         enemyPool = new GameObject("enemyPool");

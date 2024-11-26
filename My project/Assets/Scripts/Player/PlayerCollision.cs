@@ -8,6 +8,8 @@ public class PlayerCollision : MonoBehaviour
 {
     private bool isDamageTakeCooldown;
     public bool isActiveShield;
+    public bool isActiveSpeedBoost;
+    public bool isActiveDoubleDamage;
     public string effect;
     private int bonusEffectTime = 10;
 
@@ -32,51 +34,81 @@ public class PlayerCollision : MonoBehaviour
             if (effect == "hp")
                 config.hp += 50;
             else
-                StartCoroutine(bonusEffectTimer());
+                bonusEffectTimer();
 
             Destroy(collision.gameObject);
         }
     }
-    private IEnumerator bonusEffectTimer()
+    private void bonusEffectTimer()
     {
         switch (effect)
         {
             case "shield":
-                isActiveShield = true;
-                transform.GetChild(3).gameObject.SetActive(true);
+                if (!isActiveShield)
+                {
+                    isActiveShield = true;
+                    transform.GetChild(3).gameObject.SetActive(true);
+                }
+
+                StartCoroutine(shieldTimer());
                 break;
             case "doubleDamage":
-                config.damage *= 2;
-                transform.GetChild(4).gameObject.SetActive(true);
+                if (!isActiveDoubleDamage)
+                {
+                    isActiveDoubleDamage = true;
+                    config.damageScaler *= 2;
+                    transform.GetChild(4).gameObject.SetActive(true);
+                }
+
+                StartCoroutine(doubleDamageTimer());
                 break;
             case "speedBoost":
-                config.speed *= 2;
-                transform.GetChild(5).gameObject.SetActive(true);
+                if (!isActiveSpeedBoost)
+                {
+                    isActiveSpeedBoost = true;
+                    config.speedScaler *= 2;
+                    transform.GetChild(5).gameObject.SetActive(true);
+                }
+
+                StartCoroutine(speedBoostTimer());
                 break;
         }
-
+    }
+    private IEnumerator shieldTimer()
+    {
         yield return new WaitForSeconds(bonusEffectTime);
-
+        resetEffects();
+    }
+    private IEnumerator doubleDamageTimer()
+    {
+        yield return new WaitForSeconds(bonusEffectTime);
+        resetEffects();
+    }
+    private IEnumerator speedBoostTimer()
+    {
+        yield return new WaitForSeconds(bonusEffectTime);
         resetEffects();
     }
     public void resetEffects()
     {
-        if (effect != string.Empty)
+        if (isActiveShield || isActiveDoubleDamage || isActiveSpeedBoost)
         {
-            switch (effect)
+            if (isActiveShield)
             {
-                case "shield":
-                    isActiveShield = false;
-                    transform.GetChild(3).gameObject.SetActive(false);
-                    break;
-                case "doubleDamage":
-                    config.damage /= 2;
-                    transform.GetChild(4).gameObject.SetActive(false);
-                    break;
-                case "speedBoost":
-                    config.speed /= 2;
-                    transform.GetChild(5).gameObject.SetActive(false);
-                    break;
+                isActiveShield = false;
+                transform.GetChild(3).gameObject.SetActive(false);
+            }
+            if (isActiveDoubleDamage)
+            {
+                isActiveDoubleDamage = false;
+                config.damageScaler /= 2;
+                transform.GetChild(4).gameObject.SetActive(false);
+            }
+            if (isActiveSpeedBoost)
+            {
+                isActiveSpeedBoost = false;
+                config.speedScaler /= 2;
+                transform.GetChild(5).gameObject.SetActive(false);
             }
             effect = string.Empty;
         }

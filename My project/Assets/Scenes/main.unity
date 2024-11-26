@@ -130,6 +130,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 8783252135376256948, guid: 4b0c980f0142f6e428999ee72d6becf3, type: 3}
+      propertyPath: m_ContentType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8783252135376256948, guid: 4b0c980f0142f6e428999ee72d6becf3, type: 3}
+      propertyPath: m_KeyboardType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8783252135376256948, guid: 4b0c980f0142f6e428999ee72d6becf3, type: 3}
+      propertyPath: m_CharacterValidation
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8783252136042107240, guid: 4b0c980f0142f6e428999ee72d6becf3, type: 3}
       propertyPath: m_SizeDelta.x
       value: 0

@@ -3,12 +3,6 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public enum gameStatus
-{
-    play,
-    pause
-}
-
 public class GameManager : MonoBehaviour
 {
     private static GameManager _instance;
@@ -44,6 +38,9 @@ public class GameManager : MonoBehaviour
             _valueScore = value;
             if (score > record)
                 record = score;
+
+            if (value % 50 == 0 && value != 0)
+                spawnManager_.SpawnEnemy();
         }
     }
     private string keyRecord = "record";
@@ -133,7 +130,9 @@ public class GameManager : MonoBehaviour
         if (player != null)
             player.position = new Vector3(0, 0, 0);
         PlayerCollision_?.resetEffects();
+        PlayerCollision_?.StopAllCoroutines();
         playerConfig_?.Reset();
+        UIManager_?.MenuConfigurator();
     }
 }
 

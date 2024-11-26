@@ -3,10 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEditor;
+using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
+using Task = System.Threading.Tasks.Task;
 
 public class registration : MonoBehaviour
 {
@@ -38,20 +42,20 @@ public class registration : MonoBehaviour
     private bool IsValidEmail(string email)
     {
         // –егул€рное выражение дл€ проверки формата электронной почты
-        string pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
-        return Regex.IsMatch(email, pattern);
+        // string pattern =;
+        return Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
     }
     private bool IsValidPhoneNumber(string phoneNumber)
     {
         // –егул€рное выражение дл€ проверки формата номера телефона
-        string pattern = @"^\+?\d{1,3}\s?\(?\d{1,4}?\)?[\s-]?\d{1,4}[\s-]?\d{2,4}[\s-]?\d{2,4}$";
-        return Regex.IsMatch(phoneNumber, pattern);
+        //string pattern = ;
+        return Regex.IsMatch(phoneNumber, @"^\+?\d{1,3}\s?\(?\d{1,4}?\)?[\s-]?\d{1,4}[\s-]?\d{2,4}[\s-]?\d{2,4}$");
     }
     private bool IsValidPassword(string password)
     {
         // –егул€рное выражение дл€ проверки формата парол€
-        string pattern = @"^(?=.{4,10}$)(?!.*\s).*$";
-        return Regex.IsMatch(password, pattern);
+        //string pattern = ;
+        return Regex.IsMatch(password, @"^(?=.{4,10}$)(?!.*\s).*$");
     }
 
     private void Start()
@@ -73,6 +77,7 @@ public class registration : MonoBehaviour
     public void ConfirmSignIn()
     {
         UserData userData = LoadRegistrationInfo();
+        GameManager.Instance.record = userData.Record;
 
         bool isValidLogin = userData.Login.Equals(inputLoginSignIn.text);
         bool isValidPassword = userData.Password.Equals(inputPasswordSignIn.text);
@@ -95,25 +100,26 @@ public class registration : MonoBehaviour
         bool isValidEmail = IsValidEmail(inputEmail.text);
         bool isValidPhoneNumber = IsValidPhoneNumber(inputPhoneNumber.text);
         bool isValidPassword = IsValidPassword(inputPassword.text);
-        bool isValidRepeatPassword = inputPassword.text.Equals(inputRepeatPassword.text);
+        bool isValidRepeatPassword = inputPassword.text == inputRepeatPassword.text;
         bool isValidRegistration = isValidEmail && isValidPhoneNumber && isValidPassword && isValidRepeatPassword && isValidLogin;
 
-        if (!isValidLogin)
-            txtLogin.color = Color.red;
-        else
-            txtLogin.color = txtColorDefault;
+        txtLogin.color = isValidLogin ? txtColorDefault : Color.red;
+
         if (!isValidEmail)
             txtEmail.color = Color.red;
         else
             txtEmail.color = txtColorDefault;
+
         if (!isValidPhoneNumber)
             txtPhoneNumber.color = Color.red;
         else
             txtPhoneNumber.color = txtColorDefault;
+
         if (!isValidPassword)
             txtPassword.color = Color.red;
         else
             txtPassword.color = txtColorDefault;
+
         if (!isValidRepeatPassword)
             txtRepeatPassword.color = Color.red;
         else
@@ -121,29 +127,62 @@ public class registration : MonoBehaviour
 
         if (isValidRegistration)
         {
-            SaveRegistrationInfo();
+            SaveRegistrationInfo(false);
 
             PlayerPrefs.SetInt(RegistrationDoneCheckKey, 1);
             registrationDisplay.SetActive(false);
         }
     }
-    private void SaveRegistrationInfo()
+    private void SaveRegistrationInfo(bool isQuit)
     {
+        int record = 0;
+        if (isQuit)
+            record = GameManager.Instance.record;
+        else
+            record = 0;
+
         UserData userData = new UserData
         {
             Login = inputLogin.text,
             Password = inputPassword.text,
             PhoneNumber = inputPhoneNumber.text,
-            Email = inputEmail.text
+            Email = inputEmail.text,
+            Record = record
         };
 
-        string json = JsonUtility.ToJson(userData);
-        File.WriteAllText("userData.json", json);
+        System.Threading.Tasks.Task save = new System.Threading.Tasks.Task(() =>
+        {
+            string json = JsonUtility.ToJson(userData);
+
+            File.WriteAllText("userData.json", json);
+        });
+        /*
+        var prod = Task.Run(() => Prod(new double[10]));
+        var prod1 = Task.Run(() => Prod(new double[10]));
+        var prod2 = Task.Run(() => Prod(new double[10]));
+        var prod3 = Task.Run(() => Prod(new double[10]));
+
+        var allTask = Task.WhenAll(prod, prod1, prod2, prod3);
+
+        allTask.ContinueWith(t => Debug.Log("¬ывод на экран"));*/
+
+        save.Start();
     }
+
+    private double Prod(double[] arr)
+    {
+        return arr[0];
+    }
+
     private UserData LoadRegistrationInfo()
     {
         string json = File.ReadAllText("userData.json");
 
         return JsonUtility.FromJson<UserData>(json);
+    }
+
+    private void OnApplicationQuit()
+    {
+        SaveRegistrationInfo(true);
     }
 }

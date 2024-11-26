@@ -15,7 +15,7 @@ public class spawnManager : MonoBehaviour
     private float dropMaxCount = 20;
     private float dropSpawndelay = 10;
 
-    private float enemyMaxCount = 100;
+    private float enemyMaxCount = 200;
     private float enemySpawndelay = 1f;
 
     void Start()
@@ -31,7 +31,6 @@ public class spawnManager : MonoBehaviour
     }
     private IEnumerator spawnEnemyCoroutine()
     {
-
         while (true)
         {
             yield return new WaitForSeconds(enemySpawndelay);

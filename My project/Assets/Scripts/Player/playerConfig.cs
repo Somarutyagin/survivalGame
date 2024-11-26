@@ -17,6 +17,8 @@ public class playerConfig : MonoBehaviour
     [HideInInspector] public float hp;
 
     [HideInInspector] public float maxHp;
+    [HideInInspector] public float damageScaler = 1f;
+    [HideInInspector] public float speedScaler = 1f;
     [HideInInspector] public float hpScaler = 1f;
 
     private void Awake()
@@ -26,6 +28,8 @@ public class playerConfig : MonoBehaviour
     private void Update()
     {
         maxHp = hpScaler * hpDefault;
+        damage = damageScaler * damageDefault;
+        speed = speedScaler * speedDefault;
 
         if (hp > maxHp)
             hp = maxHp;
@@ -42,8 +46,14 @@ public class playerConfig : MonoBehaviour
     }
     public void Reset()
     {
-        damage = damageDefault;
-        speed = speedDefault;
-        hp = hpDefault;
+        damageScaler = 1;
+        speedScaler = 1;
+        hpScaler = 1;
+
+        maxHp = hpScaler * hpDefault;
+        damage = damageScaler * damageDefault;
+        speed = speedScaler * speedDefault;
+
+        hp = maxHp;
     }
 }

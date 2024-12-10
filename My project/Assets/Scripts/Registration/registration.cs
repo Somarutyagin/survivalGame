@@ -74,14 +74,30 @@ public class registration : MonoBehaviour
         txtColorDefault = txtLogin.color;
     }
 
+    public void BtnSignIn()
+    {
+        signInDisplay.SetActive(true);
+        registrationDisplay.SetActive(false);
+    }
+    public void BtnSignUp()
+    {
+        registrationDisplay.SetActive(true);
+        signInDisplay.SetActive(false);
+    }
+
     public void ConfirmSignIn()
     {
-        UserData userData = LoadRegistrationInfo();
-        GameManager.Instance.record = userData.Record;
+        bool isValidSignIn = false;
+        UserDataList UserDataList_ = LoadRegistrationInfo();
 
-        bool isValidLogin = userData.Login.Equals(inputLoginSignIn.text);
-        bool isValidPassword = userData.Password.Equals(inputPasswordSignIn.text);
-        bool isValidSignIn = isValidLogin && isValidPassword;
+        for (int i = 0; i < UserDataList_.Users.Count; i++)
+        {
+            if (UserDataList_.Users[i].Login == inputLoginSignIn.text && UserDataList_.Users[i].Password == inputPasswordSignIn.text)
+            {
+                isValidSignIn = true;
+                GameManager.Instance.record = UserDataList_.Users[i].Record;
+            }
+        }
 
         if (!isValidSignIn)
         {
@@ -97,6 +113,16 @@ public class registration : MonoBehaviour
     public void ConfirmRegistration()
     {
         bool isValidLogin = !string.IsNullOrEmpty(inputLogin.text);
+
+        UserDataList UserDataList_ = LoadRegistrationInfo();
+        if (UserDataList_.Users != null)
+        {
+            for (int i = 0; i < UserDataList_.Users.Count; i++)
+            {
+                if (UserDataList_.Users[i].Login == inputLogin.text)
+                    isValidLogin = false;
+            }
+        }
         bool isValidEmail = IsValidEmail(inputEmail.text);
         bool isValidPhoneNumber = IsValidPhoneNumber(inputPhoneNumber.text);
         bool isValidPassword = IsValidPassword(inputPassword.text);
@@ -104,26 +130,10 @@ public class registration : MonoBehaviour
         bool isValidRegistration = isValidEmail && isValidPhoneNumber && isValidPassword && isValidRepeatPassword && isValidLogin;
 
         txtLogin.color = isValidLogin ? txtColorDefault : Color.red;
-
-        if (!isValidEmail)
-            txtEmail.color = Color.red;
-        else
-            txtEmail.color = txtColorDefault;
-
-        if (!isValidPhoneNumber)
-            txtPhoneNumber.color = Color.red;
-        else
-            txtPhoneNumber.color = txtColorDefault;
-
-        if (!isValidPassword)
-            txtPassword.color = Color.red;
-        else
-            txtPassword.color = txtColorDefault;
-
-        if (!isValidRepeatPassword)
-            txtRepeatPassword.color = Color.red;
-        else
-            txtRepeatPassword.color = txtColorDefault;
+        txtEmail.color = isValidEmail ? txtColorDefault : Color.red;
+        txtPhoneNumber.color = isValidPhoneNumber ? txtColorDefault : Color.red;
+        txtPassword.color = isValidPassword ? txtColorDefault : Color.red;
+        txtRepeatPassword.color = isValidRepeatPassword ? txtColorDefault : Color.red;
 
         if (isValidRegistration)
         {
@@ -141,6 +151,8 @@ public class registration : MonoBehaviour
         else
             record = 0;
 
+        UserDataList UserDataList_ = LoadRegistrationInfo();
+
         UserData userData = new UserData
         {
             Login = inputLogin.text,
@@ -149,14 +161,29 @@ public class registration : MonoBehaviour
             Email = inputEmail.text,
             Record = record
         };
-
-        System.Threading.Tasks.Task save = new System.Threading.Tasks.Task(() =>
+        if (UserDataList_.Users != null)
+            UserDataList_.Users.Add(userData);
+        else
         {
-            string json = JsonUtility.ToJson(userData);
+            UserDataList_ = new UserDataList
+            {
+                Users = new List<UserData>
+                {
+                    userData
+                }
+            };
+        }
+        string json = JsonUtility.ToJson(UserDataList_, true);
+
+        File.WriteAllText("userData.json", json);
+        /*
+        Task save = new Task(() =>
+        {
+            string json = JsonUtility.ToJson(UserDataList_);
 
             File.WriteAllText("userData.json", json);
         });
-        /*
+        
         var prod = Task.Run(() => Prod(new double[10]));
         var prod1 = Task.Run(() => Prod(new double[10]));
         var prod2 = Task.Run(() => Prod(new double[10]));
@@ -164,25 +191,21 @@ public class registration : MonoBehaviour
 
         var allTask = Task.WhenAll(prod, prod1, prod2, prod3);
 
-        allTask.ContinueWith(t => Debug.Log("Вывод на экран"));*/
+        allTask.ContinueWith(t => Debug.Log("Вывод на экран"));
 
         save.Start();
+        */
     }
 
-    private double Prod(double[] arr)
-    {
-        return arr[0];
-    }
-
-    private UserData LoadRegistrationInfo()
+    private UserDataList LoadRegistrationInfo()
     {
         string json = File.ReadAllText("userData.json");
 
-        return JsonUtility.FromJson<UserData>(json);
+        return JsonUtility.FromJson<UserDataList>(json);
     }
 
     private void OnApplicationQuit()
     {
-        SaveRegistrationInfo(true);
+        //SaveRegistrationInfo(true);
     }
 }

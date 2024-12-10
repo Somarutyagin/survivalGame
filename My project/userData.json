@@ -1,1 +1,74 @@
-{"Login":"roma","Password":"1234","Email":"ewrew@asas.dgf","PhoneNumber":"453434","Record":194}
+{
+    "Users": [
+        {
+            "Login": "roma",
+            "Password": "1234",
+            "Email": "sdasda@fdsfds.sdfs",
+            "PhoneNumber": "3424545353",
+            "Record": 0
+        },
+        {
+            "Login": "roma",
+            "Password": "1234",
+            "Email": "sdasda@fdsfds.sdfs",
+            "PhoneNumber": "3424545353",
+            "Record": 194
+        },
+        {
+            "Login": "roma1",
+            "Password": "1234",
+            "Email": "eqweq@fsdfs.dfs",
+            "PhoneNumber": "38942342043",
+            "Record": 0
+        },
+        {
+            "Login": "roma1",
+            "Password": "1234",
+            "Email": "eqweq@fsdfs.dfs",
+            "PhoneNumber": "38942342043",
+            "Record": 194
+        },
+        {
+            "Login": "",
+            "Password": "",
+            "Email": "",
+            "PhoneNumber": "",
+            "Record": 194
+        },
+        {
+            "Login": "",
+            "Password": "",
+            "Email": "",
+            "PhoneNumber": "",
+            "Record": 194
+        },
+        {
+            "Login": "",
+            "Password": "",
+            "Email": "",
+            "PhoneNumber": "",
+            "Record": 194
+        },
+        {
+            "Login": "roma3",
+            "Password": "1234",
+            "Email": "dsasdasaa@fsdfs.gfhf",
+            "PhoneNumber": "13445346564",
+            "Record": 0
+        },
+        {
+            "Login": "roma3",
+            "Password": "1234",
+            "Email": "dsasdasaa@fsdfs.gfhf",
+            "PhoneNumber": "13445346564",
+            "Record": 194
+        },
+        {
+            "Login": "roma4",
+            "Password": "1234",
+            "Email": "qewqew@qwew.rte",
+            "PhoneNumber": "465456454",
+            "Record": 0
+        }
+    ]
+}

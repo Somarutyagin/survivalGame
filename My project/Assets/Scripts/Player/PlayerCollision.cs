@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class PlayerCollision : MonoBehaviour
 {
-    private bool isDamageTakeCooldown;
+    public bool isDamageTakeCooldown;
     public bool isActiveShield;
     public bool isActiveSpeedBoost;
     public bool isActiveDoubleDamage;

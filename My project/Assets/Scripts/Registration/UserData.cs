@@ -8,6 +8,10 @@ public class UserData
     public string Email;
     public string PhoneNumber;
     public int Record;
+
+    public int hpCount;
+    public int enemyCount;
+    public int score;
 }
 [System.Serializable]
 public class UserDataList

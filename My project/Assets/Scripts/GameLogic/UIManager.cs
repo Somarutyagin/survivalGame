@@ -8,13 +8,13 @@ public class UIManager : MonoBehaviour
     [SerializeField] private List<GameObject> UIListMenu = new List<GameObject>();
     [SerializeField] private List<GameObject> UIListGame = new List<GameObject>();
 
+    [SerializeField] private GameObject leaderBoardDisplay;
     [SerializeField] private GameObject PauseDisplay;
     [SerializeField] private GameObject SettingsDisplay;
     [SerializeField] private Text scoreTxt;
     [SerializeField] private Text recordTxt;
     private void Start()
     {
-        GameManager.Instance.Init();
         GameManager.Instance.activeGameStatus = gameStatus.pause;
         MenuConfigurator();
     }
@@ -53,6 +53,10 @@ public class UIManager : MonoBehaviour
             else
                 SettingsDisplay.SetActive(false);
         }
+        else if (Input.GetKeyUp(KeyCode.Escape) && leaderBoardDisplay.activeSelf)
+        {
+            leaderBoardDisplay.SetActive(false);
+        }
 
         if (GameManager.Instance.activeGameStatus == gameStatus.play)
         {
@@ -83,4 +87,14 @@ public class UIManager : MonoBehaviour
         PauseDisplay.SetActive(false);
         GameManager.Instance.activeGameStatus = gameStatus.play;
     }
+
+    public void OnLeaderBoardButtonPressed()
+    {
+        leaderBoardDisplay.SetActive(true);
+    }
+    public void OnExitLeaderBoardButtonPressed()
+    {
+        leaderBoardDisplay.SetActive(false);
+    }
+
 }

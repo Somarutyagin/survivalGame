@@ -10,6 +10,7 @@ using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
+using static UnityEngine.UIElements.UxmlAttributeDescription;
 using Task = System.Threading.Tasks.Task;
 
 public class registration : MonoBehaviour
@@ -18,6 +19,14 @@ public class registration : MonoBehaviour
 
     private Color txtColorDefault;
 
+    [SerializeField] private spawnManager spawnManager;
+
+    [SerializeField] private Transform enemyPool;
+    [SerializeField] private Text hpTxt;
+    [SerializeField] private Text scoreTxt;
+
+
+    [SerializeField] private leaderBoard leaderBoard_;
     [SerializeField] private GameObject registrationDisplay;
     [SerializeField] private GameObject signInDisplay;
 
@@ -38,6 +47,10 @@ public class registration : MonoBehaviour
 
     [SerializeField] private InputField inputLoginSignIn;
     [SerializeField] private InputField inputPasswordSignIn;
+
+    private UserDataList UserDataList_;
+    public string activeUser;
+    private bool isFirstStart = true;
 
     private bool IsValidEmail(string email)
     {
@@ -88,7 +101,7 @@ public class registration : MonoBehaviour
     public void ConfirmSignIn()
     {
         bool isValidSignIn = false;
-        UserDataList UserDataList_ = LoadRegistrationInfo();
+        UserDataList_ = LoadRegistrationInfo();
 
         for (int i = 0; i < UserDataList_.Users.Count; i++)
         {
@@ -108,6 +121,10 @@ public class registration : MonoBehaviour
         {
             signInDisplay.SetActive(false);
         }
+        AuthEnd(inputLoginSignIn.text);
+
+        if (UserDataList_ != null && UserDataList_.Users != null)
+            leaderBoardListsUpdate();
     }
 
     public void ConfirmRegistration()
@@ -115,7 +132,7 @@ public class registration : MonoBehaviour
         bool isValidLogin = !string.IsNullOrEmpty(inputLogin.text);
 
         UserDataList UserDataList_ = LoadRegistrationInfo();
-        if (UserDataList_.Users != null)
+        if (UserDataList_ != null && UserDataList_.Users != null)
         {
             for (int i = 0; i < UserDataList_.Users.Count; i++)
             {
@@ -141,9 +158,30 @@ public class registration : MonoBehaviour
 
             PlayerPrefs.SetInt(RegistrationDoneCheckKey, 1);
             registrationDisplay.SetActive(false);
+            AuthEnd(inputLogin.text);
         }
     }
-    private void SaveRegistrationInfo(bool isQuit)
+
+    private void AuthEnd(string activeLogin)
+    {
+        activeUser = activeLogin;
+    }
+
+    private void leaderBoardListsUpdate()
+    {
+        leaderBoard_.players.Clear();
+        leaderBoard_.records.Clear();
+
+        for (int i = 0; i < UserDataList_.Users.Count; i++)
+        {
+            leaderBoard_.players.Add(UserDataList_.Users[i].Login);
+            leaderBoard_.records.Add(UserDataList_.Users[i].Record);
+        }
+
+        leaderBoard_.LeaderBoardUpdate();
+    }
+
+    public void SaveRegistrationInfo(bool isQuit)
     {
         int record = 0;
         if (isQuit)
@@ -151,7 +189,12 @@ public class registration : MonoBehaviour
         else
             record = 0;
 
-        UserDataList UserDataList_ = LoadRegistrationInfo();
+        UserDataList_ = LoadRegistrationInfo();
+        List<UserData> UsersTemp = new List<UserData> { };
+        UserDataList userDataListTemp = new UserDataList
+        {
+            Users = UsersTemp
+        };
 
         UserData userData = new UserData
         {
@@ -159,10 +202,44 @@ public class registration : MonoBehaviour
             Password = inputPassword.text,
             PhoneNumber = inputPhoneNumber.text,
             Email = inputEmail.text,
-            Record = record
+            Record = record,
+
+            enemyCount = 0,
+            hpCount = 0,
+            score = 0
         };
-        if (UserDataList_.Users != null)
+        if (isQuit)
+        {
+            for (int i = 0; i < UserDataList_.Users.Count; i++)
+            {
+                if (UserDataList_.Users[i].Login == activeUser)
+                {
+                    userData = new UserData
+                    {
+                        Login = UserDataList_.Users[i].Login,
+                        Password = UserDataList_.Users[i].Password,
+                        PhoneNumber = UserDataList_.Users[i].PhoneNumber,
+                        Email = UserDataList_.Users[i].Email,
+                        Record = record,
+
+                        enemyCount = enemyPool.childCount,
+                        hpCount = int.Parse(hpTxt.text),
+                        score = int.Parse(scoreTxt.text)
+                    };
+                }
+                else
+                {
+                    userDataListTemp.Users.Add(UserDataList_.Users[i]);
+                }
+            }
+        }
+        if (UserDataList_ != null && UserDataList_.Users != null && !isQuit)
             UserDataList_.Users.Add(userData);
+        else if (UserDataList_ != null && UserDataList_.Users != null && isQuit)
+        {
+            UserDataList_ = userDataListTemp;
+            UserDataList_.Users.Add(userData);
+        }
         else
         {
             UserDataList_ = new UserDataList
@@ -173,10 +250,6 @@ public class registration : MonoBehaviour
                 }
             };
         }
-        string json = JsonUtility.ToJson(UserDataList_, true);
-
-        File.WriteAllText("userData.json", json);
-        /*
         Task save = new Task(() =>
         {
             string json = JsonUtility.ToJson(UserDataList_);
@@ -184,6 +257,7 @@ public class registration : MonoBehaviour
             File.WriteAllText("userData.json", json);
         });
         
+        /*
         var prod = Task.Run(() => Prod(new double[10]));
         var prod1 = Task.Run(() => Prod(new double[10]));
         var prod2 = Task.Run(() => Prod(new double[10]));
@@ -192,10 +266,43 @@ public class registration : MonoBehaviour
         var allTask = Task.WhenAll(prod, prod1, prod2, prod3);
 
         allTask.ContinueWith(t => Debug.Log("Вывод на экран"));
+        */
 
         save.Start();
-        */
+        leaderBoardListsUpdate();
     }
+
+    public void loadGameInfo()
+    {
+        int enemyCount_ = 0;
+        int hpCount_ = 0;
+        int score_ = 0;
+        if (UserDataList_ != null && UserDataList_.Users != null)
+        {
+            for (int i = 0; i < UserDataList_.Users.Count; i++)
+            {
+                if (UserDataList_.Users[i].Login == activeUser)
+                {
+                    enemyCount_ = UserDataList_.Users[i].enemyCount;
+                    hpCount_ = UserDataList_.Users[i].hpCount;
+                    score_ = UserDataList_.Users[i].score;
+                }
+            }
+        }
+        if (isFirstStart)
+        {
+            for (int i = 0; i < enemyCount_; i++)
+            {
+                spawnManager.SpawnEnemy();
+            }
+            hpTxt.transform.parent.parent.GetComponent<playerConfig>().hp = hpCount_;
+            GameManager.Instance.score = score_;
+        }
+        GameManager.Instance.activeRecord = GameManager.Instance.record;
+
+        isFirstStart = false;
+    }
+
 
     private UserDataList LoadRegistrationInfo()
     {
@@ -206,6 +313,6 @@ public class registration : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        //SaveRegistrationInfo(true);
+        SaveRegistrationInfo(true);
     }
 }

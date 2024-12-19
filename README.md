@@ -5,3 +5,4 @@ pet project to demonstrate some skills
 * Unit Test
 * auth system and players list
 * simple sound/anims managers
+* saving game state on exit/crash
